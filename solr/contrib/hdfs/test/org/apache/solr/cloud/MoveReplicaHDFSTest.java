@@ -45,7 +45,7 @@ public class MoveReplicaHDFSTest extends MoveReplicaTest {
 
   @BeforeClass
   public static void setupClass() throws Exception {
-    dfsCluster = HdfsTestUtil.setupClass(createTempDir().toFile().getAbsolutePath());
+    dfsCluster = HdfsTestUtil.setupClass(LuceneTestCase.createTempDir().toFile().getAbsolutePath());
   }
 
   @AfterClass
