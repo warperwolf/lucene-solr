@@ -17,6 +17,7 @@
 package org.apache.lucene.store;
 
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FilterOutputStream;
 import java.io.IOException;
@@ -229,6 +230,16 @@ public abstract class FSDirectory extends BaseDirectory {
       throw new NoSuchFileException("file \"" + name + "\" is pending delete");
     }
     return Files.size(directory.resolve(name));
+  }
+
+  @Override
+  public long getLastModified(String fileName) throws IOException {
+    File directory = this.getDirectory().toFile();
+    File file = new File(directory, fileName);
+    if (!file.exists()) {
+      throw new FileNotFoundException("File [" + fileName + "] not found");
+    }
+    return file.lastModified();
   }
 
   @Override

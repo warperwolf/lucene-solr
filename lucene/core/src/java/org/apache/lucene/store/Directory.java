@@ -217,4 +217,13 @@ public abstract class Directory implements Closeable {
   protected static String getTempFileName(String prefix, String suffix, long counter) {
     return IndexFileNames.segmentFileName(prefix, suffix + "_" + Long.toString(counter, Character.MAX_RADIX), "tmp");
   }
+
+  /**
+   * Returns the time that the file denoted by the file name {@code fileName}. Returns A long value representing the
+   * time the file was last modified, measured in milliseconds since the epoch (00:00:00 GMT, January 1, 1970), or 0L if the file does not exist.
+   */
+  public long getLastModified(String fileName) throws IOException {
+    throw new UnsupportedOperationException("This directory does not implement the getLastModified method.");
+  };
+
 }

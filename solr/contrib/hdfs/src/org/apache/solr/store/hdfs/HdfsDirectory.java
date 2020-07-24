@@ -190,10 +190,11 @@ public class HdfsDirectory extends BaseDirectory {
     FileStatus fileStatus = fileSystem.getFileStatus(new Path(hdfsDirPath, name));
     return fileStatus.getLen();
   }
-  
-  public long fileModified(String name) throws IOException {
+
+  @Override
+  public long getLastModified(String fileName) throws IOException {
     FileStatus fileStatus = getFileSystem().getFileStatus(
-        new Path(hdfsDirPath, name));
+        new Path(hdfsDirPath, fileName));
     return fileStatus.getModificationTime();
   }
   
