@@ -21,7 +21,6 @@ import java.lang.invoke.MethodHandles;
 import java.util.Vector;
 
 import org.apache.solr.core.DirectoryFactory;
-import org.apache.solr.core.HdfsDirectoryFactory;
 import org.apache.solr.core.PluginInfo;
 import org.apache.solr.core.SolrCore;
 import org.apache.solr.core.SolrEventListener;
@@ -122,12 +121,9 @@ public abstract class UpdateHandler implements SolrInfoBean {
     boolean skipUpdateLog = core.getCoreDescriptor().getCloudDescriptor() != null && !core.getCoreDescriptor().getCloudDescriptor().requiresTransactionLog();
     if (updateLog == null && ulogPluginInfo != null && ulogPluginInfo.isEnabled() && !skipUpdateLog) {
       DirectoryFactory dirFactory = core.getDirectoryFactory();
-      if (dirFactory instanceof HdfsDirectoryFactory) {
-        ulog = new HdfsUpdateLog(((HdfsDirectoryFactory)dirFactory).getConfDir());
-      } else {
-        String className = ulogPluginInfo.className == null ? UpdateLog.class.getName() : ulogPluginInfo.className;
-        ulog = core.getResourceLoader().newInstance(className, UpdateLog.class);
-      }
+
+      String className = ulogPluginInfo.className == null ? UpdateLog.class.getName() : ulogPluginInfo.className;
+      ulog = core.getResourceLoader().newInstance(className, UpdateLog.class);
 
       if (!core.isReloaded() && !dirFactory.isPersistent()) {
         ulog.clearLog(core, ulogPluginInfo);
