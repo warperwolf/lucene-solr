@@ -44,8 +44,10 @@ import java.util.TreeSet;
 
 import org.apache.commons.io.IOUtils;
 import org.apache.solr.cloud.ZkSolrResourceLoader;
+import org.apache.solr.common.ConfigNode;
 import org.apache.solr.common.SolrException;
 import org.apache.solr.common.util.XMLErrorLogger;
+import org.apache.solr.util.DOMConfigNode;
 import org.apache.solr.util.DOMUtil;
 import org.apache.solr.util.SystemIdResolver;
 import org.slf4j.Logger;
@@ -72,6 +74,8 @@ public class XmlConfigFile { // formerly simply "Config"
   private final String prefix;
   private final String name;
   private final SolrResourceLoader loader;
+
+  private final ConfigNode rootNode;
   private final Properties substituteProperties;
   private int zkVersion = -1;
 
@@ -153,10 +157,14 @@ public class XmlConfigFile { // formerly simply "Config"
       if (substituteProps != null) {
         DOMUtil.substituteProperties(doc, getSubstituteProperties());
       }
+      rootNode = new DOMConfigNode(doc.getDocumentElement());
     } catch (ParserConfigurationException | SAXException | TransformerException e)  {
       SolrException.log(log, "Exception during parsing file: " + name, e);
       throw new SolrException(SolrException.ErrorCode.SERVER_ERROR, e);
     }
+  }
+  public ConfigNode rootNode() {
+    return rootNode;
   }
 
   /*
